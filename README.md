@@ -1,5 +1,7 @@
 # OpenTofu Multi-Cloud Infrastructure Template
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A comprehensive and dynamic OpenTofu template that supports multiple cloud providers (Azure, AWS, GCP, Alibaba Cloud) with a universal VM configuration system.
 
 ## 🌟 Features
@@ -359,24 +361,33 @@ modules/
 └── alicloud/               # Alibaba Cloud-specific resources
 ```
 
+## 📚 Documentation
+
+- [Backend Configuration Guide](BACKEND_GUIDE.md) - Complete guide for remote state management
+- [Backend Usage Examples](BACKEND_EXAMPLE.md) - Practical examples and workflows
+- [Cloud Provider Mapping](CLOUD_MAPPING.md) - Detailed cloud provider configurations
+
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the [MIT License](LICENSE).
+
+## ⚠️ Security Notice
+
+- **Never commit sensitive data** like API keys, passwords, or private keys
+- Use environment variables or secure secret management systems
+- Always review your `terraform.tfvars` files before committing
+- Consider using backend remote storage for state management
 
 ## 🆘 Support
 
-For issues and questions:
-1. Check the documentation
-2. Review existing issues
-3. Create a new issue with detailed information
+If you encounter any issues or have questions:
+1. Check the documentation files
+2. Review the examples in each environment
+3. Ensure your cloud provider credentials are properly configured
 
 ## 🔄 Version History
 
