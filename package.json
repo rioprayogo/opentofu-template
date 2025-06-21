@@ -1,0 +1,44 @@
+{
+  "name": "@rioprayogo/opentofu-multi-cloud-infrastructure",
+  "version": "1.0.0",
+  "description": "A comprehensive and dynamic OpenTofu template that supports multiple cloud providers (Azure, AWS, GCP, Alibaba Cloud) with a universal VM configuration system.",
+  "main": "main.tf",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rioprayogo/opentofu-template.git"
+  },
+  "keywords": [
+    "opentofu",
+    "terraform",
+    "infrastructure",
+    "multi-cloud",
+    "azure",
+    "aws",
+    "gcp",
+    "alibaba-cloud",
+    "iac",
+    "devops"
+  ],
+  "author": "Rioprayogo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rioprayogo/opentofu-template/issues"
+  },
+  "homepage": "https://github.com/rioprayogo/opentofu-template#readme",
+  "files": [
+    "main.tf",
+    "variables.tf",
+    "outputs.tf",
+    "providers.tf",
+    "modules/",
+    "environments/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "opentofu": ">=1.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+} 
