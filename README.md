@@ -122,6 +122,201 @@ tofu plan
 tofu apply
 ```
 
+## 📦 Using as Module in Other Projects
+
+You can use this template as a module in your own OpenTofu/Terraform projects without cloning the repository. Simply reference the module directly from GitHub:
+
+### Azure Module Example
+
+```hcl
+module "infrastructure" {
+  source = "git::https://github.com/rioprayogo/opentofu-template.git//modules/azure?ref=v1.0.0"
+
+  project_name  = "myproject"
+  environment   = "dev"
+  location      = "eastus"
+  azure_subscription_id  = "your-subscription-id"
+  azure_tenant_id        = "your-tenant-id"
+  azure_client_id        = "your-client-id"
+  azure_client_secret    = "your-client-secret"
+  azure_resource_group_name = "myproject-dev-rg"
+
+  vm_config = [
+    {
+      instance_name      = "web-1"
+      os_disk_size_gb    = 64
+      instance_type      = "Standard_B2s"
+      enable_public_ip   = true
+      enable_monitoring  = true
+      location           = "eastus"
+      network = {
+        use_existing_vpc = false
+        new_vpc = {
+          vpc_name    = "my-vnet"
+          subnet_cidr = "10.0.1.0/24"
+        }
+      }
+      additional_disks = [
+        {
+          size_gb      = 128
+          storage_type = "Premium_LRS"
+          caching      = "ReadWrite"
+        }
+      ]
+    }
+  ]
+
+  tags = {
+    Owner   = "yourname"
+    Purpose = "testing"
+  }
+}
+```
+
+### AWS Module Example
+
+```hcl
+module "infrastructure" {
+  source = "git::https://github.com/rioprayogo/opentofu-template.git//modules/aws?ref=v1.0.0"
+
+  project_name  = "myproject"
+  environment   = "dev"
+  region        = "us-east-1"
+  aws_region    = "us-east-1"
+  aws_access_key = "your-access-key"
+  aws_secret_key = "your-secret-key"
+
+  vm_config = [
+    {
+      instance_name      = "web-1"
+      os_disk_size_gb    = 64
+      instance_type      = "t3.micro"
+      enable_public_ip   = true
+      enable_monitoring  = true
+      location           = "us-east-1"
+      network = {
+        use_existing_vpc = false
+        new_vpc = {
+          vpc_name    = "my-vpc"
+          subnet_cidr = "10.0.1.0/24"
+        }
+      }
+      additional_disks = [
+        {
+          size_gb      = 128
+          storage_type = "gp3"
+          caching      = "readwrite"
+        }
+      ]
+    }
+  ]
+
+  tags = {
+    Owner   = "yourname"
+    Purpose = "testing"
+  }
+}
+```
+
+### GCP Module Example
+
+```hcl
+module "infrastructure" {
+  source = "git::https://github.com/rioprayogo/opentofu-template.git//modules/gcp?ref=v1.0.0"
+
+  project_name  = "myproject"
+  environment   = "dev"
+  region        = "us-central1"
+  zone          = "us-central1-a"
+  gcp_project_id  = "your-project-id"
+  gcp_region      = "us-central1"
+  gcp_zone        = "us-central1-a"
+  gcp_credentials = "path/to/service-account-key.json"
+
+  vm_config = [
+    {
+      instance_name      = "web-1"
+      os_disk_size_gb    = 64
+      instance_type      = "e2-micro"
+      enable_public_ip   = true
+      enable_monitoring  = true
+      location           = "us-central1-a"
+      network = {
+        use_existing_vpc = false
+        new_vpc = {
+          vpc_name    = "my-vpc"
+          subnet_cidr = "10.0.1.0/24"
+        }
+      }
+      additional_disks = [
+        {
+          size_gb      = 128
+          storage_type = "pd-ssd"
+          caching      = "READ_WRITE"
+        }
+      ]
+    }
+  ]
+
+  tags = {
+    Owner   = "yourname"
+    Purpose = "testing"
+  }
+}
+```
+
+### Alibaba Cloud Module Example
+
+```hcl
+module "infrastructure" {
+  source = "git::https://github.com/rioprayogo/opentofu-template.git//modules/alicloud?ref=v1.0.0"
+
+  project_name  = "myproject"
+  environment   = "dev"
+  region        = "cn-hangzhou"
+  alicloud_region    = "cn-hangzhou"
+  alicloud_access_key = "your-access-key"
+  alicloud_secret_key = "your-secret-key"
+
+  vm_config = [
+    {
+      instance_name      = "web-1"
+      os_disk_size_gb    = 64
+      instance_type      = "ecs.t5-lc1m1.small"
+      enable_public_ip   = true
+      enable_monitoring  = true
+      location           = "cn-hangzhou"
+      network = {
+        use_existing_vpc = false
+        new_vpc = {
+          vpc_name    = "my-vpc"
+          subnet_cidr = "10.0.1.0/24"
+        }
+      }
+      additional_disks = [
+        {
+          size_gb      = 128
+          storage_type = "cloud_ssd"
+          caching      = "readwrite"
+        }
+      ]
+    }
+  ]
+
+  tags = {
+    Owner   = "yourname"
+    Purpose = "testing"
+  }
+}
+```
+
+### Module Usage Tips
+
+- **Version Locking**: Use `?ref=v1.0.0` to lock to a specific version and avoid breaking changes
+- **Module Selection**: Replace `modules/azure` with `modules/aws`, `modules/gcp`, or `modules/alicloud` as needed
+- **Required Variables**: Check the `variables.tf` file in each module to see all required variables
+- **Outputs**: Each module provides standardized outputs for VM information, network details, and resource IDs
+
 ## 📋 Universal VM Configuration
 
 The `vm_config` variable provides a consistent way to configure VMs across all cloud providers:
