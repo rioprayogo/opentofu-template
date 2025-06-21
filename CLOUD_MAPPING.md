@@ -119,46 +119,188 @@ This document provides detailed mappings for instance types, storage types, and 
 
 ### Azure Network
 ```hcl
-network = {
-  use_existing_vpc = false
-  new_vpc = {
-    vpc_name = "my-vnet"
-    subnet_cidr = "10.0.1.0/24"
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    os_disk_size_gb = 50
+    instance_type = "Standard_B2s"        # Azure
+    # instance_type = "t3.small"          # AWS
+    # instance_type = "e2-small"          # GCP
+    # instance_type = "ecs.t5-lc1m2.small" # Alibaba
+    
+    enable_public_ip = true
+    enable_monitoring = true
+    location = "eastus"
+    
+    network = {
+      use_existing_vpc = false
+      new_vpc = {
+        vpc_name = "my-vnet"
+        subnet_cidr = "10.0.1.0/24"
+      }
+    }
+    
+    additional_disks = [
+      {
+        size_gb = 100
+        storage_type = "StandardSSD_LRS"  # Azure
+        # storage_type = "gp3"             # AWS
+        # storage_type = "pd-balanced"     # GCP
+        # storage_type = "cloud_ssd"       # Alibaba
+        caching = "ReadWrite"
+      }
+    ]
   }
-}
+]
 ```
 
 ### AWS Network
 ```hcl
-network = {
-  use_existing_vpc = false
-  new_vpc = {
-    vpc_name = "my-vpc"
-    subnet_cidr = "10.0.1.0/24"
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    os_disk_size_gb = 50
+    instance_type = "Standard_B2s"        # Azure
+    # instance_type = "t3.small"          # AWS
+    # instance_type = "e2-small"          # GCP
+    # instance_type = "ecs.t5-lc1m2.small" # Alibaba
+    
+    enable_public_ip = true
+    enable_monitoring = true
+    location = "eastus"
+    
+    network = {
+      use_existing_vpc = false
+      new_vpc = {
+        vpc_name = "my-vpc"
+        subnet_cidr = "10.0.1.0/24"
+      }
+    }
+    
+    additional_disks = [
+      {
+        size_gb = 100
+        storage_type = "StandardSSD_LRS"  # Azure
+        # storage_type = "gp3"             # AWS
+        # storage_type = "pd-balanced"     # GCP
+        # storage_type = "cloud_ssd"       # Alibaba
+        caching = "ReadWrite"
+      }
+    ]
   }
-}
+]
 ```
 
 ### GCP Network
 ```hcl
-network = {
-  use_existing_vpc = false
-  new_vpc = {
-    vpc_name = "my-vpc"
-    subnet_cidr = "10.0.1.0/24"
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    os_disk_size_gb = 50
+    instance_type = "Standard_B2s"        # Azure
+    # instance_type = "t3.small"          # AWS
+    # instance_type = "e2-small"          # GCP
+    # instance_type = "ecs.t5-lc1m2.small" # Alibaba
+    
+    enable_public_ip = true
+    enable_monitoring = true
+    location = "eastus"
+    
+    network = {
+      use_existing_vpc = false
+      new_vpc = {
+        vpc_name = "my-vpc"
+        subnet_cidr = "10.0.1.0/24"
+      }
+    }
+    
+    additional_disks = [
+      {
+        size_gb = 100
+        storage_type = "StandardSSD_LRS"  # Azure
+        # storage_type = "gp3"             # AWS
+        # storage_type = "pd-balanced"     # GCP
+        # storage_type = "cloud_ssd"       # Alibaba
+        caching = "ReadWrite"
+      }
+    ]
   }
-}
+]
 ```
 
 ### Alibaba Cloud Network
 ```hcl
-network = {
-  use_existing_vpc = false
-  new_vpc = {
-    vpc_name = "my-vpc"
-    subnet_cidr = "10.0.1.0/24"
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    os_disk_size_gb = 50
+    instance_type = "Standard_B2s"        # Azure
+    # instance_type = "t3.small"          # AWS
+    # instance_type = "e2-small"          # GCP
+    # instance_type = "ecs.t5-lc1m2.small" # Alibaba
+    
+    enable_public_ip = true
+    enable_monitoring = true
+    location = "eastus"
+    
+    network = {
+      use_existing_vpc = false
+      new_vpc = {
+        vpc_name = "my-vpc"
+        subnet_cidr = "10.0.1.0/24"
+      }
+    }
+    
+    additional_disks = [
+      {
+        size_gb = 100
+        storage_type = "StandardSSD_LRS"  # Azure
+        # storage_type = "gp3"             # AWS
+        # storage_type = "pd-balanced"     # GCP
+        # storage_type = "cloud_ssd"       # Alibaba
+        caching = "ReadWrite"
+      }
+    ]
   }
-}
+]
+```
+
+### Using Existing VPC (All Clouds)
+```hcl
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    os_disk_size_gb = 50
+    instance_type = "Standard_B2s"        # Azure
+    # instance_type = "t3.small"          # AWS
+    # instance_type = "e2-small"          # GCP
+    # instance_type = "ecs.t5-lc1m2.small" # Alibaba
+    
+    enable_public_ip = true
+    enable_monitoring = true
+    location = "eastus"
+    
+    network = {
+      use_existing_vpc = true
+      existing_vpc = {
+        vpc_name = "existing-vnet"
+        existing_nsg_name = "existing-nsg"
+        subnet_cidr = "10.0.10.0/24"
+      }
+    }
+    
+    additional_disks = [
+      {
+        size_gb = 100
+        storage_type = "StandardSSD_LRS"  # Azure
+        # storage_type = "gp3"             # AWS
+        # storage_type = "pd-balanced"     # GCP
+        # storage_type = "cloud_ssd"       # Alibaba
+        caching = "ReadWrite"
+      }
+    ]
+  }
+]
 ```
 
 ## 📏 Size Limits

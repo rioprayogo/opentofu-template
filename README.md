@@ -132,7 +132,7 @@ The `vm_config` variable provides a consistent way to configure VMs across all c
 vm_config = [
   {
     instance_name        = string    # Unique name for the VM
-    os_disk_size_gb     = number    # OS disk size in GB
+    os_disk_size_gb     = number    # OS disk size in GB (1-4095)
     instance_type       = string    # Cloud-specific instance type
     enable_public_ip    = bool      # Whether to assign public IP
     enable_monitoring   = bool      # Enable monitoring/logging
@@ -153,13 +153,38 @@ vm_config = [
     
     additional_disks = [
       {
-        size_gb        = number     # Disk size in GB
+        size_gb        = number     # Disk size in GB (1-32767)
         storage_type   = string     # Cloud-specific storage type
         caching        = string     # Caching policy
       }
     ]
   }
 ]
+```
+
+### Network Configuration Examples
+
+#### Using New VPC (Default)
+```hcl
+network = {
+  use_existing_vpc = false
+  new_vpc = {
+    vpc_name = "my-vnet"
+    subnet_cidr = "10.0.1.0/24"
+  }
+}
+```
+
+#### Using Existing VPC
+```hcl
+network = {
+  use_existing_vpc = true
+  existing_vpc = {
+    vpc_name = "existing-vnet"
+    existing_nsg_name = "existing-nsg"
+    subnet_cidr = "10.0.2.0/24"
+  }
+}
 ```
 
 ### Cloud Provider Mappings
@@ -257,108 +282,77 @@ vm_config = [
 
 ## 🌐 Network Configuration
 
-### New VPC Creation
-```hcl
-network = {
-  use_existing_vpc = false
-  new_vpc = {
-    vpc_name = "my-vnet"
-    subnet_cidr = "10.0.1.0/24"
-  }
-}
-```
-
 ### Using Existing VPC
+If you want to use an existing VPC/Network:
+
 ```hcl
-network = {
-  use_existing_vpc = true
-  existing_vpc = {
-    vpc_name = "existing-vnet"
-    existing_nsg_name = "existing-nsg"
-    subnet_cidr = "10.0.10.0/24"
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    # ... other config ...
+    
+    network = {
+      use_existing_vpc = true
+      existing_vpc = {
+        vpc_name = "shared-vnet"
+        existing_nsg_name = "shared-nsg"
+        subnet_cidr = "10.0.10.0/24"
+      }
+    }
   }
-}
+]
 ```
 
-## 📊 Monitoring and Logging
+### Creating New VPC
+If you want to create a new VPC/Network:
 
-All cloud providers support built-in monitoring:
-
-- **Azure**: Azure Monitor, Log Analytics
-- **AWS**: CloudWatch, CloudTrail
-- **GCP**: Cloud Monitoring, Cloud Logging
-- **Alibaba Cloud**: Cloud Monitor, Log Service
-
-Enable monitoring per VM:
 ```hcl
-enable_monitoring = true
+vm_config = [
+  {
+    instance_name = "web-server-1"
+    # ... other config ...
+    
+    network = {
+      use_existing_vpc = false
+      new_vpc = {
+        vpc_name = "my-vnet"
+        subnet_cidr = "10.0.1.0/24"
+      }
+    }
+  }
+]
 ```
 
-## 🔒 Security Features
+## 🔧 Usage
 
-- Network Security Groups (Azure)
-- Security Groups (AWS)
-- Firewall Rules (GCP)
-- Security Groups (Alibaba Cloud)
-- SSH key authentication
-- Private subnets for database servers
-
-## 📝 Validation Rules
-
-The template includes comprehensive validation:
-
-- OS disk size limits per cloud provider
-- Additional disk size limits
-- Network configuration validation
-- Required field validation
-
-## 🛠️ Commands
+### Using Makefile (Recommended)
 
 ```bash
+# Initialize environment with backend
+make dev-init-azure
+make staging-init-azure
+make prod-init-azure
+
+# Deploy infrastructure
+make dev-plan && make dev-apply
+make staging-plan && make staging-apply
+make prod-plan && make prod-apply
+```
+
+### Manual Commands
+
+```bash
+# Navigate to environment
+cd environments/dev
+
 # Initialize
 tofu init
 
-# Plan deployment
+# Plan
 tofu plan
 
-# Apply changes
+# Apply
 tofu apply
-
-# Destroy infrastructure
-tofu destroy
-
-# Show outputs
-tofu output
-
-# Format code
-tofu fmt
-
-# Validate configuration
-tofu validate
-```
-
-## 📁 File Structure
-
-```
-environments/
-├── dev/
-│   ├── main.tf              # Dev-specific configuration
-│   ├── variables.tf         # Dev variables
-│   └── terraform.tfvars     # Dev values
-├── staging/
-│   ├── main.tf
-│   ├── variables.tf
-│   └── terraform.tfvars
-└── prod/
-    ├── main.tf
-    ├── variables.tf
-    └── terraform.tfvars
-
-modules/
-├── azure/                   # Azure-specific resources
-├── aws/                     # AWS-specific resources
-├── gcp/                     # GCP-specific resources
-└── alicloud/               # Alibaba Cloud-specific resources
 ```
 
 ## 📚 Documentation
@@ -391,5 +385,7 @@ If you encounter any issues or have questions:
 
 ## 🔄 Version History
 
-- **v2.0**: Universal VM configuration system
-- **v1.0**: Initial multi-cloud template 
+- **v1.0.0** - Initial release with multi-cloud support
+- **v1.1.0** - Added universal VM configuration system
+- **v1.2.0** - Added backend remote state support
+- **v1.3.0** - Added environment-specific configurations 
